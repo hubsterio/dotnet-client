@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.489
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hubster.Auth", "src\Hubster.Auth\Hubster.Auth.csproj", "{6630DA33-A067-40FD-A4DA-59E0F6B27D1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. Solution Items", "00. Solution Items", "{C402724C-8563-473A-8BC9-2A1D4965C7ED}"
+	ProjectSection(SolutionItems) = preProject
+		Hubster.licenseheader = Hubster.licenseheader
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Client Libraries", "01. Client Libraries", "{F3B48969-EAA7-4D0F-B8C9-EADAD1E8DA53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. TestHarness", "02. TestHarness", "{C6FBB2DA-B3A1-4165-90C8-F34408B55A2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHarness", "src\TestHarness\TestHarness.csproj", "{6E28DD91-4E98-4920-906E-B2935DD67B10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hubster.Engine", "src\Hubster.Engine\Hubster.Engine.csproj", "{FA1A03FA-64D2-4D43-B775-80A5CDEEC9F6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6630DA33-A067-40FD-A4DA-59E0F6B27D1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6630DA33-A067-40FD-A4DA-59E0F6B27D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6630DA33-A067-40FD-A4DA-59E0F6B27D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6630DA33-A067-40FD-A4DA-59E0F6B27D1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E28DD91-4E98-4920-906E-B2935DD67B10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E28DD91-4E98-4920-906E-B2935DD67B10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E28DD91-4E98-4920-906E-B2935DD67B10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E28DD91-4E98-4920-906E-B2935DD67B10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA1A03FA-64D2-4D43-B775-80A5CDEEC9F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA1A03FA-64D2-4D43-B775-80A5CDEEC9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA1A03FA-64D2-4D43-B775-80A5CDEEC9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA1A03FA-64D2-4D43-B775-80A5CDEEC9F6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6630DA33-A067-40FD-A4DA-59E0F6B27D1A} = {F3B48969-EAA7-4D0F-B8C9-EADAD1E8DA53}
+		{6E28DD91-4E98-4920-906E-B2935DD67B10} = {C6FBB2DA-B3A1-4165-90C8-F34408B55A2E}
+		{FA1A03FA-64D2-4D43-B775-80A5CDEEC9F6} = {F3B48969-EAA7-4D0F-B8C9-EADAD1E8DA53}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CD748A4-FEC1-4DFC-B591-C7C982BC8F62}
+	EndGlobalSection
+EndGlobal
