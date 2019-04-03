@@ -3,14 +3,3 @@ extensions: designer.cs generated.cs
 extensions: .cs .cpp .h
 // Hubster 
 // Copyright (c) %CurrentYear% Hubster Solutions Inc. All rights reserved.
-
-extensions: .aspx .ascx
-<%-- 
-	Hubster 
-	Copyright (c) %CurrentYear% Hubster Solutions Inc. All rights reserved.	
---%>
-extensions:  .xml .config .xsd
-<!--
-	Hubster 
-	Copyright (c) %CurrentYear% Hubster Solutions Inc. All rights reserved.	
--->

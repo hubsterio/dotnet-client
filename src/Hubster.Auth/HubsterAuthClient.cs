@@ -1,168 +1,117 @@
-﻿using System;
+﻿using Hubster.Auth.Models;
+using Hubster.Auth.RemoteAccess;
+using System;
 using System.Net;
 
 namespace Hubster.Auth
 {
-    public class HubsterAuthClient
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Hubster.Auth.IHubsterAuthClient" />
+    public class HubsterAuthClient : IHubsterAuthClient
     {
         private readonly IdentityAccess _identityAccess;
+        private readonly Func<HubsterAuthClient, Models.IdentityResponse<IdentityToken>> _onAuthorizationRequest;
 
         public string HostUrl { get; private set; }
 
-        public HubsterAuthClient(string hostUrl = "identity.hubster.io")
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HubsterAuthClient" /> class.
+        /// </summary>
+        /// <param name="onAuthorizationRequest">The on authorization request.</param>
+        /// <param name="hostUrl">The host URL.</param>
+        public HubsterAuthClient(Func<HubsterAuthClient, IdentityResponse<IdentityToken>> onAuthorizationRequest, string hostUrl = "https://identity.hubster.io")
         {
             HostUrl = hostUrl;
             _identityAccess = new IdentityAccess(HostUrl);
+            _onAuthorizationRequest = onAuthorizationRequest;            
         }
 
-        public TokenResponse<UserToken> GetUserToken(string username, string password)
+        /// <summary>
+        /// Gets the user token.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <returns></returns>
+        public IdentityResponse<IdentityToken> GetUserToken(string username, string password)
         {
-            var response = new TokenResponse<UserToken>();
-
             if(string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                response.ServerStatusCode = HttpStatusCode.BadRequest;
-                response.ServerStatusMessage = "Username and password are required.";
-
-                return response;
-            }
-            
-            var identityResponse = _identityAccess.GetUserToken(username, password);
-            response.ServerStatusCode = identityResponse.ServerStatusCode;
-            response.ServerStatusMessage = identityResponse.ServerStatusMessage;
-
-            if (identityResponse.ServerStatusCode == HttpStatusCode.OK)
-            {
-                response.Token = new UserToken
+                return new IdentityResponse<IdentityToken>
                 {
-                    Kind = TokenKind.User,
-                    AccessToken = identityResponse.Token.AccessToken,
-                    RefreshToken = identityResponse.Token.RefreshToken,
-                    TokenType = identityResponse.Token.TokenType,
-                    Expires = DateTimeOffset.UtcNow.AddSeconds(identityResponse.Token.Expires.Value)
+                    StatusCode = HttpStatusCode.BadRequest,
+                    StatusMessage = "username and password are required.",
                 };
             }
-
+            
+            var response = _identityAccess.GetUserToken(username, password);
             return response;
         }
 
-        public TokenResponse<UserToken> RefreshToken(string refreshToken)
+        /// <summary>
+        /// Refreshes the token.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
+        public IdentityResponse<IdentityToken> RefreshToken(IdentityToken token)
         {
-            var response = new TokenResponse<UserToken>();
-
-            if (string.IsNullOrWhiteSpace(refreshToken))
+            if(DateTimeOffset.UtcNow >= token?.ExpireTime 
+            || string.IsNullOrWhiteSpace(token?.RefreshToken) == true)
             {
-                response.ServerStatusCode = HttpStatusCode.BadRequest;
-                response.ServerStatusMessage = "RefreshToken is required.";
+                var authResponse = _onAuthorizationRequest?.Invoke(this);
 
-                return response;
-            }
-            
-            var identityResponse = _identityAccess.GetUserRefreshToken(refreshToken);
-            response.ServerStatusCode = identityResponse.ServerStatusCode;
-            response.ServerStatusMessage = identityResponse.ServerStatusMessage;
-
-            if (identityResponse.ServerStatusCode == HttpStatusCode.OK)
-            {
-                response.Token = new UserToken
+                return authResponse ?? new IdentityResponse<IdentityToken>
                 {
-                    Kind = TokenKind.User,
-                    AccessToken = identityResponse.Token.AccessToken,
-                    RefreshToken = identityResponse.Token.RefreshToken,
-                    TokenType = identityResponse.Token.TokenType,
-                    Expires = DateTimeOffset.UtcNow.AddSeconds(identityResponse.Token.Expires.Value)
+                    StatusCode = HttpStatusCode.Unauthorized,
+                    StatusMessage = HttpStatusCode.Unauthorized.ToString(),
                 };
             }
 
+            var response = _identityAccess.GetUserRefreshToken(token?.RefreshToken);
             return response;
         }
 
-        public TokenResponse<UserToken> RefreshToken(UserToken token)
+        /// <summary>
+        /// Gets the client token.
+        /// </summary>
+        /// <param name="clientId">The client identifier.</param>
+        /// <param name="secret">The secret.</param>
+        /// <returns></returns>
+        public IdentityResponse<IdentityToken> GetClientToken(string clientId, string secret)
         {
-            return RefreshToken(token?.RefreshToken);
-        }
-
-        public TokenResponse<Token> GetClientToken(string clientId, string secret)
-        {
-            var response = new TokenResponse<Token>();
-
             if (string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(secret))
             {
-                response.ServerStatusCode = HttpStatusCode.BadRequest;
-                response.ServerStatusMessage = "clientId and secret are required.";
-
-                return response;
-            }
-            
-            var identityResponse = _identityAccess.GetClientToken(clientId, secret);
-            response.ServerStatusCode = identityResponse.ServerStatusCode;
-            response.ServerStatusMessage = identityResponse.ServerStatusMessage;
-
-            if (identityResponse.ServerStatusCode == HttpStatusCode.OK)
-            {
-                response.Token = new Token
+                return new IdentityResponse<IdentityToken>
                 {
-                    Kind = TokenKind.Client,
-                    AccessToken = identityResponse.Token.AccessToken,                    
-                    TokenType = identityResponse.Token.TokenType,
-                    Expires = DateTimeOffset.UtcNow.AddSeconds(identityResponse.Token.Expires.Value)
+                    StatusCode = HttpStatusCode.BadRequest,
+                    StatusMessage = "clientId and secret are required.",
                 };
             }
-
+            
+            var response = _identityAccess.GetClientToken(clientId, secret);
             return response;
         }
 
-        public TokenResponse<UserToken> EnsureLifespand(UserToken token)
+        /// <summary>
+        /// Ensures the lifespan.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
+        public IdentityResponse<IdentityToken> EnsureLifespan(IdentityToken token = null)
         {
-            if(token.HasExpired() == false)
+            if(token?.HasExpired() == false)
             {
-                return new TokenResponse<UserToken>
+                return new IdentityResponse<IdentityToken>
                 {
-                    ServerStatusCode = HttpStatusCode.OK,
-                    ServerStatusMessage = HttpStatusCode.OK.ToString(),
+                    StatusCode = HttpStatusCode.OK,
+                    StatusMessage = HttpStatusCode.OK.ToString(),
                     Token = token,                    
                 };
             }
-            
-            var identityResponse = _identityAccess.GetUserRefreshToken(token.RefreshToken);
-            var response = new TokenResponse<UserToken>
-            {
-                ServerStatusCode = identityResponse.ServerStatusCode,
-                ServerStatusMessage = identityResponse.ServerStatusMessage
-            };
 
-            if (identityResponse.ServerStatusCode == HttpStatusCode.OK)
-            {
-                response.Token = new UserToken
-                {
-                    Kind = TokenKind.User,
-                    AccessToken = identityResponse.Token.AccessToken,
-                    RefreshToken = identityResponse.Token.RefreshToken,
-                    TokenType = identityResponse.Token.TokenType,
-                    Expires = DateTimeOffset.UtcNow.AddSeconds(identityResponse.Token.Expires.Value)
-                };
-            }
-
+            var response = RefreshToken(token);
             return response;
-        }
-
-        public TokenResponse<Token> EnsureLifespand(Token token)
-        {
-            if (token.HasExpired() == false)
-            {
-                return new TokenResponse<Token>
-                {
-                    ServerStatusCode = HttpStatusCode.OK,
-                    ServerStatusMessage = HttpStatusCode.OK.ToString(),
-                    Token = token,
-                };
-            }
-
-            return new TokenResponse<Token>
-            {
-                ServerStatusCode = HttpStatusCode.Unauthorized,
-                ServerStatusMessage = HttpStatusCode.Unauthorized.ToString(),                
-            };
         }
     }
 }

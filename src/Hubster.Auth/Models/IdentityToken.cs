@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System;
 
-namespace Hubster.Auth
+namespace Hubster.Auth.Models
 {
-    internal class IdentityToken
+    public class IdentityToken
     {
         [JsonProperty("access_token", NullValueHandling = NullValueHandling.Ignore)]
         public string AccessToken { get; internal set; }
@@ -15,5 +16,20 @@ namespace Hubster.Auth
 
         [JsonProperty("expires_in", NullValueHandling = NullValueHandling.Ignore)]
         public int? Expires { get; internal set; }
+
+        [JsonProperty("expire_time", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTimeOffset ExpireTime { get; internal set; }
+
+        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
+        public string Error { get; internal set; }
+
+        [JsonProperty("error_description", NullValueHandling = NullValueHandling.Ignore)]
+        public string ErrorDescription { get; internal set; }
+
+        public bool HasExpired()
+        {
+            // shorten the expire date by 1 minutes
+            return DateTimeOffset.UtcNow > ExpireTime.AddMinutes(-2);
+        }
     }
 }

@@ -6,7 +6,8 @@ namespace TestHarness
     {
         static void Main(string[] args)
         {
-            HubsterAuthPlayground.Run();
+            // HubsterAuthPlayground.Run();
+            HubsterDirectPlayground.Run();
         }
     }
 }

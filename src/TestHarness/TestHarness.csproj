@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hubster.Auth\Hubster.Auth.csproj" />
-    <ProjectReference Include="..\Hubster.Engine\Hubster.Engine.csproj" />
+    <ProjectReference Include="..\Hubster.Direct\Hubster.Direct.csproj" />
   </ItemGroup>
 
 </Project>
