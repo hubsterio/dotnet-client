@@ -1,6 +1,9 @@
-﻿using Hubster.Direct.Models;
+﻿using Hubster.Direct.Enums;
+using Hubster.Direct.Models;
+using Hubster.Direct.Models.Direct;
 using Hubster.Direct.RemoteAccess;
 using System;
+using System.Collections.Generic;
 
 namespace Hubster.Direct
 {
@@ -26,9 +29,9 @@ namespace Hubster.Direct
         /// <param name="authorizer">The authorizer.</param>
         /// <param name="request">The request.</param>
         /// <returns></returns>
-        public ApiResponse<EstablishedConversationModel> Get(IHubsterAuthorizer authorizer, EstablishConversationRequestModel request)
+        public ApiResponse<IEnumerable<DirectActivityModel>> Get(IHubsterAuthorizer authorizer, EstablishedConversationModel conversation, long lastEventId, IntegrationType type)
         {
-            var apiResponse = _engineAccess.Get(authorizer, request);
+            var apiResponse = _engineAccess.Get(authorizer, conversation, lastEventId, type);
             return apiResponse;
         }
 
@@ -36,11 +39,25 @@ namespace Hubster.Direct
         /// Gets the established conversation.
         /// </summary>
         /// <param name="authorizer">The authorizer.</param>
-        /// <param name="conversationId">The conversation identifier.</param>
+        /// <param name="conversation">The conversation.</param>
+        /// <param name="activityModel">The activity model.</param>
         /// <returns></returns>
-        public ApiResponse<EstablishedConversationModel> Send(IHubsterAuthorizer authorizer, Guid conversationId)
+        public ApiResponse<DirectResponseModel> SendToAgent(IHubsterAuthorizer authorizer, EstablishedConversationModel conversation, DirectActivityModel activityModel)
         {
-            var apiResponse = _engineAccess.Send(authorizer, conversationId);
+            var apiResponse = _engineAccess.SendToAgent(authorizer, conversation, activityModel);
+            return apiResponse;
+        }
+
+        /// <summary>
+        /// Sends to customer.
+        /// </summary>
+        /// <param name="authorizer">The authorizer.</param>
+        /// <param name="conversation">The conversation.</param>
+        /// <param name="activityModel">The activity model.</param>
+        /// <returns></returns>
+        public ApiResponse<DirectResponseModel> SendToCustomer(IHubsterAuthorizer authorizer, EstablishedConversationModel conversation, DirectActivityModel activityModel)
+        {
+            var apiResponse = _engineAccess.SendToCustomer(authorizer, conversation, activityModel);
             return apiResponse;
         }
     }

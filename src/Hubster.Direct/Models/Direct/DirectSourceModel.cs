@@ -1,12 +1,13 @@
 ﻿using Hubster.Direct.Enums;
 using Newtonsoft.Json;
+using System;
 
 namespace Hubster.Direct.Models.Direct
 {
     public class DirectSourceModel
     {        
         [JsonProperty("integration_id", NullValueHandling = NullValueHandling.Ignore)]
-        public string IntegrationId { get; set; }
+        public Guid IntegrationId { get; set; }
 
         [JsonProperty("integration_type", NullValueHandling = NullValueHandling.Ignore)]
         public IntegrationType? IntegrationType { get; set; }

@@ -1,9 +1,12 @@
 ﻿using Hubster.Auth;
 using Hubster.Auth.Models;
 using Hubster.Direct;
+using Hubster.Direct.Enums;
 using Hubster.Direct.Models;
+using Hubster.Direct.Models.Direct;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace TestHarness.Playground
 {
@@ -15,16 +18,13 @@ namespace TestHarness.Playground
             return apiResponse;
         }
 
-        static void EstablishConversation()
+        static ApiResponse<EstablishedConversationModel> EstablishConversation(HubsterAuthorizer authorizer)
         {
-            var auth = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
-            var authorizer = new HubsterAuthorizer(auth);
-            
             var direct = new HubsterDirectClient("http://localhost:8251");
 
             var apiResponse = direct.Conversation.Establish(authorizer, new EstablishConversationRequestModel
             {
-                IntegrationId = "00000000-0000-0000-0000-000000000020",
+                IntegrationId = "00000000-0000-0000-0000-000000000001",
                 Binding = "my unique data",
                 Properties = new ConversationPropertiesModel
                 {
@@ -35,23 +35,75 @@ namespace TestHarness.Playground
                     }
                 }
             });
+
+            return apiResponse;
         }
 
-        static void GetEstablishedConversation()
+        static ApiResponse<EstablishedConversationModel> GetEstablishedConversation(HubsterAuthorizer authorizer)
         {
-            var auth = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
-            var authorizer = new HubsterAuthorizer(auth);
-
             var direct = new HubsterDirectClient("http://localhost:8251");
+            var apiResponse = direct.Conversation.GetEstablished(authorizer, Guid.Parse("71E202DD-F67D-4245-B1FD-2A558332AE90"));
 
-            var apiResponse = direct.Conversation.GetEstablished(authorizer, Guid.Parse("b33bab55-df33-4a11-ac19-b09c83309c06"));
+            return apiResponse;
+        }
+
+        static void GetActivities(HubsterAuthorizer authorizer)
+        {
+            var direct = new HubsterDirectClient("http://localhost:8251");
+            var conResponse = GetEstablishedConversation(authorizer);
+            if (conResponse.StatusCode == HttpStatusCode.OK)
+            {
+                var actResponse = direct.Activity.Get(authorizer, conResponse.Content, 0, IntegrationType.Customer);
+            }
+        }
+
+        static void SendActivityToAgent(HubsterAuthorizer authorizer)
+        {
+            var direct = new HubsterDirectClient("http://localhost:8251");
+            var conResponse = GetEstablishedConversation(authorizer);
+            if (conResponse.StatusCode == HttpStatusCode.OK)
+            {
+                var actResponse = direct.Activity.SendToAgent(authorizer, conResponse.Content, new DirectActivityModel
+                {
+                    Message = new DirectMessageModel
+                    {
+                        Text = "Hello from Customer TestPlayGround "
+                    },
+                });
+            }
+        }
+
+        static void SendActivityToCustomer(HubsterAuthorizer authorizer)
+        {
+            var direct = new HubsterDirectClient("http://localhost:8251");
+            var conResponse = GetEstablishedConversation(authorizer);
+            if (conResponse.StatusCode == HttpStatusCode.OK)
+            {
+                var actResponse = direct.Activity.SendToCustomer(authorizer, conResponse.Content, new DirectActivityModel
+                {
+                    Sender = new DirectSourceModel
+                    {
+                        IntegrationId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                    },
+                    Message = new DirectMessageModel
+                    {
+                        Text = "Hello from Business TestPlayGround "
+                    },
+                });
+            }
         }
 
 
         public static void Run()
         {
-            // EstablishConversation();
-            GetEstablishedConversation();
+            var auth = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
+            var authorizer = new HubsterAuthorizer(auth);
+
+            // EstablishConversation(authorizer);
+            // GetEstablishedConversation(authorizer);
+            // GetActivities(authorizer);
+            // SendActivityToAgent(authorizer);
+            SendActivityToCustomer(authorizer);
         }
     }
 }

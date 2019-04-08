@@ -28,14 +28,5 @@ namespace Hubster.Direct.Models.Direct
 
         [JsonProperty("flow_process", NullValueHandling = NullValueHandling.Ignore)]
         public ActivityFlowProcessType? FlowProcess { get; set; }
-
-        public void Map(DirectActivityModel source)
-        {            
-            EventId = source.EventId;            
-            Sender = source.Sender;
-            Recipient = source.Recipient;
-            Message = source.Message;
-            SenderAction = source.SenderAction;
-        }
     }
 }
