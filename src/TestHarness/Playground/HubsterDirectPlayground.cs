@@ -21,7 +21,7 @@ namespace TestHarness.Playground
             var auth = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
             var direct = new HubsterDirectClient(auth, "http://localhost:8251");
 
-            var apiResponse = direct.EstablishConversation(new EstablishConversationRequestModel
+            var apiResponse = direct.Conversation.Establish(new EstablishConversationRequestModel
             {
                 IntegrationId = "00000000-0000-0000-0000-000000000020",
                 Binding = "my unique data",
@@ -41,7 +41,7 @@ namespace TestHarness.Playground
             var auth = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
             var direct = new HubsterDirectClient(auth, "http://localhost:8251");
 
-            var apiResponse = direct.GetEstablishedConversation(Guid.Parse("b33bab55-df33-4a11-ac19-b09c83309c06"));
+            var apiResponse = direct.Conversation.GetEstablished(Guid.Parse("b33bab55-df33-4a11-ac19-b09c83309c06"));
         }
 
 
