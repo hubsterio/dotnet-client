@@ -65,7 +65,7 @@ namespace Hubster.Auth.RemoteAccess
         private IdentityResponse<IdentityToken> GetToken(string body)
         {
             var client = new RestClient(_hostUrl);
-            var request = new RestRequest("connect/token", Method.POST) { Timeout = 10000 };
+            var request = new RestRequest("connect/token", Method.POST) { Timeout = 20000 };
 
             request.AddParameter("application/x-www-form-urlencoded", body, ParameterType.RequestBody);
 
@@ -98,7 +98,22 @@ namespace Hubster.Auth.RemoteAccess
             }
             else
             {
-                apiResponse.StatusCode = restResponse.StatusCode != 0 ? restResponse.StatusCode : HttpStatusCode.BadGateway;
+                apiResponse.StatusCode = restResponse.StatusCode;
+
+                if (restResponse.StatusCode == 0)
+                {
+                    switch(restResponse.ResponseStatus)
+                    {
+                        case ResponseStatus.TimedOut:
+                            apiResponse.StatusCode = HttpStatusCode.RequestTimeout;
+                            break;
+
+                        default:
+                            apiResponse.StatusCode = HttpStatusCode.BadGateway;
+                            break;
+                    }
+                }
+
                 apiResponse.StatusMessage = apiResponse.StatusCode.ToString();
             }
 

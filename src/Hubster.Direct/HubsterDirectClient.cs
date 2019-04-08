@@ -1,6 +1,4 @@
-﻿using Hubster.Auth;
-
-namespace Hubster.Direct
+﻿namespace Hubster.Direct
 {
     /// <summary>
     /// 
@@ -16,11 +14,11 @@ namespace Hubster.Direct
         /// </summary>
         /// <param name="authClient">The authentication client.</param>
         /// <param name="hostUrl">The host URL.</param>
-        public HubsterDirectClient(HubsterAuthClient authClient, string hostUrl = "https://direct.hubster.io")
+        public HubsterDirectClient(string hostUrl = "https://direct.hubster.io")
         {
-            Conversation = new HubsterConversation(authClient, hostUrl);
-            Activity = new HubsterActivity(authClient, hostUrl);
-            Resource = new HubsterResource(authClient, hostUrl);
+            Conversation = new HubsterConversation(hostUrl);
+            Activity = new HubsterActivity(hostUrl);
+            Resource = new HubsterResource(hostUrl);
         }
     }
 }

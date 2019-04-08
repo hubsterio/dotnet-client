@@ -4,7 +4,6 @@ using Hubster.Direct;
 using Hubster.Direct.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace TestHarness.Playground
 {
@@ -19,9 +18,11 @@ namespace TestHarness.Playground
         static void EstablishConversation()
         {
             var auth = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
-            var direct = new HubsterDirectClient(auth, "http://localhost:8251");
+            var authorizer = new HubsterAuthorizer(auth);
+            
+            var direct = new HubsterDirectClient("http://localhost:8251");
 
-            var apiResponse = direct.Conversation.Establish(new EstablishConversationRequestModel
+            var apiResponse = direct.Conversation.Establish(authorizer, new EstablishConversationRequestModel
             {
                 IntegrationId = "00000000-0000-0000-0000-000000000020",
                 Binding = "my unique data",
@@ -39,9 +40,11 @@ namespace TestHarness.Playground
         static void GetEstablishedConversation()
         {
             var auth = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
-            var direct = new HubsterDirectClient(auth, "http://localhost:8251");
+            var authorizer = new HubsterAuthorizer(auth);
 
-            var apiResponse = direct.Conversation.GetEstablished(Guid.Parse("b33bab55-df33-4a11-ac19-b09c83309c06"));
+            var direct = new HubsterDirectClient("http://localhost:8251");
+
+            var apiResponse = direct.Conversation.GetEstablished(authorizer, Guid.Parse("b33bab55-df33-4a11-ac19-b09c83309c06"));
         }
 
 

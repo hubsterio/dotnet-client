@@ -1,5 +1,4 @@
-﻿using Hubster.Auth;
-using Hubster.Direct.Models;
+﻿using Hubster.Direct.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -14,21 +13,21 @@ namespace Hubster.Direct.RemoteAccess
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineResourceAccess" /> class.
         /// </summary>
-        /// <param name="authClient">The authentication client.</param>
         /// <param name="hostUrl">The host URL.</param>
-        public EngineResourceAccess(IHubsterAuthClient authClient, string hostUrl) : base(authClient, hostUrl)
+        public EngineResourceAccess(string hostUrl) : base(hostUrl)
         {
         }
 
         /// <summary>
         /// Establishes the conversation.
         /// </summary>
+        /// <param name="authorizer">The authorizer.</param>
         /// <param name="request">The request.</param>
         /// <returns></returns>
-        public ApiResponse<EstablishedConversationModel> Get(EstablishConversationRequestModel request)
+        public ApiResponse<EstablishedConversationModel> Get(IHubsterAuthorizer authorizer, EstablishConversationRequestModel request)
         {
             var apiResponse = new ApiResponse<EstablishedConversationModel>();
-            if(EnsureLifespan(apiResponse) == false)
+            if (authorizer.EnsureLifespan(apiResponse) == false)
             {
                 return apiResponse;
             }
@@ -37,7 +36,7 @@ namespace Hubster.Direct.RemoteAccess
             var restRequest = new RestRequest("v1/api/conversations/establish", Method.POST) { Timeout = 10000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
-            restRequest.AddHeader("Authorization", $"Bearer {_token.AccessToken}");
+            restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
 
             var body = JsonConvert.SerializeObject(request);
             restRequest.AddParameter("application/json", body, ParameterType.RequestBody);
@@ -53,10 +52,10 @@ namespace Hubster.Direct.RemoteAccess
         /// </summary>
         /// <param name="conversationId">The conversation identifier.</param>
         /// <returns></returns>
-        public ApiResponse<EstablishedConversationModel> Send(Guid conversationId)
+        public ApiResponse<EstablishedConversationModel> Send(IHubsterAuthorizer authorizer, Guid conversationId)
         {
             var apiResponse = new ApiResponse<EstablishedConversationModel>();
-            if (EnsureLifespan(apiResponse) == false)
+            if (authorizer.EnsureLifespan(apiResponse) == false)
             {
                 return apiResponse;
             }
@@ -65,7 +64,7 @@ namespace Hubster.Direct.RemoteAccess
             var restRequest = new RestRequest($"v1/api/conversations/{conversationId}/established", Method.GET) { Timeout = 10000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
-            restRequest.AddHeader("Authorization", $"Bearer {_token.AccessToken}");
+            restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
 
             var restResponse = client.Execute(restRequest);
             apiResponse = ExtractResponse<EstablishedConversationModel>(restResponse);
