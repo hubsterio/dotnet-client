@@ -60,7 +60,19 @@ namespace TestHarness.Playground
         static void SendActivityToAgent(HubsterAuthorizer authorizer)
         {
             var direct = new HubsterDirectClient("http://localhost:8251");
+
+
+            //direct.Start((actvity) =>
+            //{
+
+
+
+            //});
+
+            //direct.Stop();
+
             var conResponse = GetEstablishedConversation(authorizer);
+
             if (conResponse.StatusCode == HttpStatusCode.OK)
             {
                 var actResponse = direct.Activity.SendToAgent(authorizer, conResponse.Content, new DirectActivityModel
@@ -76,6 +88,7 @@ namespace TestHarness.Playground
         static void SendActivityToCustomer(HubsterAuthorizer authorizer)
         {
             var direct = new HubsterDirectClient("http://localhost:8251");
+
             var conResponse = GetEstablishedConversation(authorizer);
             if (conResponse.StatusCode == HttpStatusCode.OK)
             {
