@@ -6,7 +6,7 @@ namespace TestHarness.Playground
 {
     public static class HubsterAuthPlayground
     {
-        static IdentityResponse<IdentityToken> OnAuthorizationRequest(HubsterAuthClient client)
+        static IdentityResponse<IdentityToken> OnAuthRequest(HubsterAuthClient client)
         {
             var apiResponse = client.GetUserToken("user1@email.com", "Password123");
             return apiResponse;
@@ -14,44 +14,44 @@ namespace TestHarness.Playground
 
         static void GetUserToken_Good()
         {
-            var authClient = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
+            var authClient = new HubsterAuthClient(OnAuthRequest, "http://localhost:5000");
             var apiResponse = authClient.GetUserToken("user1@email.com", "Password123!");
         }
 
         static void GetUserToken_BadCreds()
         {
-            var authClient = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
+            var authClient = new HubsterAuthClient(OnAuthRequest, "http://localhost:5000");
             var apiResponse = authClient.GetUserToken("unknown", "unknown");
         }
 
         static void GetUserToken_BadUrl()
         {
-            var authClient = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:500");
+            var authClient = new HubsterAuthClient(OnAuthRequest, "http://localhost:500");
             var apiResponse = authClient.GetUserToken("unknown", "unknown");
         }
 
         static void GetClientToken_Good()
         {
-            var authClient = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
+            var authClient = new HubsterAuthClient(OnAuthRequest, "http://localhost:5000");
             var apiResponse = authClient.GetClientToken("hubster.engine.api.00000000000000000000000000000001", "9c5Vbnd0vZGlqTdBzhz9hb9cQ0M=");
         }
 
         static void GetClientToken_BadCreds()
         {
-            var authClient = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
+            var authClient = new HubsterAuthClient(OnAuthRequest, "http://localhost:5000");
             var apiResponse = authClient.GetClientToken("unknown", "unknown");
         }
 
         static void GetUserToken_BadGrant()
         {
             // need to change the grant_type in the IdentitAccess class to test this.
-            var authClient = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
+            var authClient = new HubsterAuthClient(OnAuthRequest, "http://localhost:5000");
             var apiResponse = authClient.GetUserToken("user1@email.com", "Password123!");
         }
 
         static void GetRefreshToken_Good()
         {
-            var authClient = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
+            var authClient = new HubsterAuthClient(OnAuthRequest, "http://localhost:5000");
             var apiResponse = authClient.GetUserToken("user1@email.com", "Password123!");
 
             apiResponse = authClient.EnsureLifespan(apiResponse.Token);
@@ -59,7 +59,7 @@ namespace TestHarness.Playground
 
         static void EnsureLifeSpan_Good()
         {
-            var authClient = new HubsterAuthClient(OnAuthorizationRequest, "http://localhost:5000");
+            var authClient = new HubsterAuthClient(OnAuthRequest, "http://localhost:5000");
             var apiResponse = authClient.EnsureLifespan();
 
             if (apiResponse.StatusCode == HttpStatusCode.OK)

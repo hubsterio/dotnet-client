@@ -1,17 +1,9 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Net;
 
 namespace Hubster.Direct.Models
 {
-    public class ExceptionResponse
+    public class ExceptionResponse : ApiResponse
     {
-        [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
-        public HttpStatusCode? Status { get; set; }
-
-        [JsonProperty("errors", NullValueHandling = NullValueHandling.Ignore)]
-        public List<ErrorCodeModel> Errors { get; set; }
-
         [JsonProperty("trackingId", NullValueHandling = NullValueHandling.Ignore)]
         public string TrackingId { get; set; }
 

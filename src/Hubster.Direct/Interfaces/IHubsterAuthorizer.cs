@@ -2,7 +2,7 @@
 using Hubster.Auth.Models;
 using Hubster.Direct.Models;
 
-namespace Hubster.Direct
+namespace Hubster.Direct.Interfaces
 {
     public interface IHubsterAuthorizer
     {

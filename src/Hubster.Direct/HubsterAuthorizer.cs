@@ -1,5 +1,6 @@
 ﻿using Hubster.Auth;
 using Hubster.Auth.Models;
+using Hubster.Direct.Interfaces;
 using Hubster.Direct.Models;
 using System.Collections.Generic;
 using System.Net;
@@ -9,7 +10,7 @@ namespace Hubster.Direct
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="Hubster.Direct.IHubsterAuthorizer" />
+    /// <seealso cref="Hubster.Direct.Interfaces.IHubsterAuthorizer" />
     public class HubsterAuthorizer : IHubsterAuthorizer
     {
         public IHubsterAuthClient AuthClient { get; private set; }
@@ -29,7 +30,7 @@ namespace Hubster.Direct
         /// <summary>
         /// Ensures the lifespan.
         /// </summary>
-        /// <param name="apiResponse">The API response.</param>
+        /// <param name="errorRsponse">The error response.</param>
         /// <returns></returns>
         public bool EnsureLifespan(ApiResponse apiResponse)
         {
@@ -58,7 +59,9 @@ namespace Hubster.Direct
                 return false;
             }
 
+            apiResponse.StatusCode = identityResponse.StatusCode;
             Token = identityResponse.Token;
+
             return true;
         }
     }

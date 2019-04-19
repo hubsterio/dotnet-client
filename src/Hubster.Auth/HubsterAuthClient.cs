@@ -12,20 +12,20 @@ namespace Hubster.Auth
     public class HubsterAuthClient : IHubsterAuthClient
     {
         private readonly IdentityAccess _identityAccess;
-        private readonly Func<HubsterAuthClient, Models.IdentityResponse<IdentityToken>> _onAuthorizationRequest;
+        private readonly Func<HubsterAuthClient, IdentityResponse<IdentityToken>> _onAuthRequest;
 
         public string HostUrl { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterAuthClient" /> class.
         /// </summary>
-        /// <param name="onAuthorizationRequest">The on authorization request.</param>
+        /// <param name="onAuthRequest">The on authentication request.</param>
         /// <param name="hostUrl">The host URL.</param>
-        public HubsterAuthClient(Func<HubsterAuthClient, IdentityResponse<IdentityToken>> onAuthorizationRequest, string hostUrl = "https://identity.hubster.io")
+        public HubsterAuthClient(Func<HubsterAuthClient, IdentityResponse<IdentityToken>> onAuthRequest, string hostUrl = "https://identity.hubster.io")
         {
             HostUrl = hostUrl;
             _identityAccess = new IdentityAccess(HostUrl);
-            _onAuthorizationRequest = onAuthorizationRequest;            
+            _onAuthRequest = onAuthRequest;            
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Hubster.Auth
             if(DateTimeOffset.UtcNow >= token?.ExpireTime 
             || string.IsNullOrWhiteSpace(token?.RefreshToken) == true)
             {
-                var authResponse = _onAuthorizationRequest?.Invoke(this);
+                var authResponse = _onAuthRequest?.Invoke(this);
 
                 return authResponse ?? new IdentityResponse<IdentityToken>
                 {

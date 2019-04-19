@@ -1,8 +1,10 @@
 ﻿using Hubster.Direct.Enums;
+using Hubster.Direct.Interfaces;
 using Hubster.Direct.Models;
 using Hubster.Direct.Models.Direct;
 using Newtonsoft.Json;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 
 namespace Hubster.Direct.RemoteAccess
@@ -24,11 +26,11 @@ namespace Hubster.Direct.RemoteAccess
         /// Establishes the conversation.
         /// </summary>
         /// <param name="authorizer">The authorizer.</param>
-        /// <param name="conversation">The conversation.</param>
+        /// <param name="conversationId">The conversation identifier.</param>
         /// <param name="lastEventId">The last event identifier.</param>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public ApiResponse<IEnumerable<DirectActivityModel>> Get(IHubsterAuthorizer authorizer, EstablishedConversationModel conversation, long lastEventId, IntegrationType type)
+        public ApiResponse<IEnumerable<DirectActivityModel>> Get(IHubsterAuthorizer authorizer, Guid conversationId, long lastEventId, IntegrationType type)
         {
             var apiResponse = new ApiResponse<IEnumerable<DirectActivityModel>>();
             if(authorizer.EnsureLifespan(apiResponse) == false)
@@ -37,7 +39,7 @@ namespace Hubster.Direct.RemoteAccess
             }
 
             var client = new RestClient(_hostUrl);
-            var restRequest = new RestRequest($"v1/api/interactions/activities/{conversation.ConversationId}", Method.GET) { Timeout = 20000 };
+            var restRequest = new RestRequest($"v1/api/interactions/activities/{conversationId}", Method.GET) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
             restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
@@ -52,39 +54,14 @@ namespace Hubster.Direct.RemoteAccess
         }
 
         /// <summary>
-        /// Sends to agent.
+        /// Sends the specified authorizer.
         /// </summary>
         /// <param name="authorizer">The authorizer.</param>
-        /// <param name="conversation">The conversation.</param>
+        /// <param name="conversationId">The conversation identifier.</param>
         /// <param name="activity">The activity.</param>
+        /// <param name="path">The path.</param>
         /// <returns></returns>
-        public ApiResponse<DirectResponseModel> SendToAgent(IHubsterAuthorizer authorizer, EstablishedConversationModel conversation, DirectActivityModel activity)
-        {
-            var apiResponse = Send(authorizer, conversation, activity, "customer");
-            return apiResponse;
-        }
-
-        /// <summary>
-        /// Sends to customer.
-        /// </summary>
-        /// <param name="authorizer">The authorizer.</param>
-        /// <param name="conversation">The conversation.</param>
-        /// <param name="activity">The activity.</param>
-        /// <returns></returns>
-        public ApiResponse<DirectResponseModel> SendToCustomer(IHubsterAuthorizer authorizer, EstablishedConversationModel conversation, DirectActivityModel activity)
-        {
-            var apiResponse = Send(authorizer, conversation, activity, "business");
-            return apiResponse;
-        }
-
-        /// <summary>
-        /// Sends to agent.
-        /// </summary>
-        /// <param name="authorizer">The authorizer.</param>
-        /// <param name="conversation">The conversation.</param>
-        /// <param name="activity">The activity.</param>
-        /// <returns></returns>
-        private ApiResponse<DirectResponseModel> Send(IHubsterAuthorizer authorizer, EstablishedConversationModel conversation, DirectActivityModel activity, string path)
+        public ApiResponse<DirectResponseModel> Send(IHubsterAuthorizer authorizer, Guid conversationId, DirectActivityModel activity, string path)
         {
             var apiResponse = new ApiResponse<DirectResponseModel>();
             if (authorizer.EnsureLifespan(apiResponse) == false)
@@ -93,7 +70,7 @@ namespace Hubster.Direct.RemoteAccess
             }
 
             var client = new RestClient(_hostUrl);
-            var restRequest = new RestRequest($"v1/inbound/{path}/direct/activity/{conversation.ConversationId}", Method.POST) { Timeout = 20000 };
+            var restRequest = new RestRequest($"v1/inbound/{path}/direct/activity/{conversationId}", Method.POST) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
             restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");

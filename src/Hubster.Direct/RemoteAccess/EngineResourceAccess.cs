@@ -1,4 +1,5 @@
-﻿using Hubster.Direct.Models;
+﻿using Hubster.Direct.Interfaces;
+using Hubster.Direct.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using System;

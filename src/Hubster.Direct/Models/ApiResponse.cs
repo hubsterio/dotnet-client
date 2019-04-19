@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Hubster.Direct.Models
 {
     public class ApiResponse
     {
-        public HttpStatusCode StatusCode { get; internal set; }
-        public List<ErrorCodeModel> Errors { get; internal set; }
+        [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
+        public HttpStatusCode StatusCode { get; set; }
+
+        [JsonProperty("errors", NullValueHandling = NullValueHandling.Ignore)]
+        public List<ErrorCodeModel> Errors { get; set; }
     }
 
     public class ApiResponse<T> : ApiResponse where T: class
