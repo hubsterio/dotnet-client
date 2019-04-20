@@ -10,7 +10,7 @@ namespace Hubster.Direct.Events
     /// 
     /// </summary>
     /// <seealso cref="Hubster.Direct.HubsterEventsBase" />
-    public class HubsterEventsBusiness : HubsterEventsBase
+    public class HubsterEventsBusiness : HubsterEventsBase, IHubsterEventsBusiness
     {
 
         /// <summary>

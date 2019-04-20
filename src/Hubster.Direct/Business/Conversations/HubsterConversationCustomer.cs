@@ -6,7 +6,7 @@ namespace Hubster.Direct.Business.Conversations
     /// <summary>
     /// 
     /// </summary>
-    public class HubsterConversationCustomer : HubsterConversationBase
+    public class HubsterConversationCustomer : HubsterConversationBase, IHubsterConversationCustomer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterConversationCustomer" /> class.
@@ -23,7 +23,7 @@ namespace Hubster.Direct.Business.Conversations
         /// <returns></returns>
         public ApiResponse<EstablishedConversationModel> Establish(IHubsterAuthorizer authorizer, EstablishConversationRequestModel request)
         {
-            var apiResponse = _engineAccess.EstablishConversation(authorizer, request);
+            var apiResponse = _engineAccess.Establish(authorizer, request);
             return apiResponse;
         }
     }

@@ -9,7 +9,7 @@ namespace Hubster.Direct.Events
     /// <summary>
     /// 
     /// </summary>
-    public class HubsterEventsCustomer : HubsterEventsBase
+    public class HubsterEventsCustomer : HubsterEventsBase, IHubsterEventsCustomer
     {
 
         /// <summary>

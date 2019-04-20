@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace TestHarness.Playground
+namespace TestHarnessCustomer
 {
     public static class CustomerPlayground
     {
@@ -168,7 +168,7 @@ namespace TestHarness.Playground
                 return true;
             }
 
-            var conversationResponse = client.Converstion.Establish(authorizer, GetCustomerConversationRequestModel(username));
+            var conversationResponse = client.Conversation.Establish(authorizer, GetCustomerConversationRequestModel(username));
             if (conversationResponse.StatusCode != HttpStatusCode.OK)
             {
                 Console.WriteLine();
@@ -189,13 +189,13 @@ namespace TestHarness.Playground
             {
                 var lastUser = GetUserName(_lastConverstion);
 
-                Console.WriteLine($"Select a commands:");
-                Console.WriteLine($"1. Establish new conversation:");
+                Console.WriteLine($"Select a command:");
+                Console.WriteLine($"1. Establish new conversation.");
                 Console.Write($"2. Start chatting as ");
                 DisplaySimpleText($"'{lastUser ?? "You must first establish conversation!"}'", ConsoleColor.Yellow);
                 Console.WriteLine();
-                Console.WriteLine($"3. List interactions:");
-                Console.WriteLine($"4. Quit (q or quit:");
+                Console.WriteLine($"3. List interactions");
+                Console.WriteLine($"4. Quit (q or quit)");
 
                 var selection = Console.ReadLine().ToLower();
 
@@ -283,14 +283,8 @@ namespace TestHarness.Playground
                 var username = GetUserName(_lastConverstion);
 
                 var eventResponse = client.Events.Start(authorizer, _lastConverstion,
-                    activity =>
-                    {
-                        Display(activity);
-                    },
-                    error =>
-                    {
-                        Display(error.Description, ConsoleColor.Yellow);
-                    }
+                    activity => Display(activity),
+                    error => Display(error.Description, ConsoleColor.Yellow)
                 );
 
                 if (eventResponse.StatusCode != HttpStatusCode.OK)

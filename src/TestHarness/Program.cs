@@ -8,8 +8,6 @@ namespace TestHarness
         {
             // HubsterAuthPlayground.Run();
             // HubsterDirectPlayground.Run();
-            CustomerPlayground.Run();
-            // AgentPlayground.Run();
         }
     }
 }

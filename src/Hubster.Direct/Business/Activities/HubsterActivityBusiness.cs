@@ -10,7 +10,7 @@ namespace Hubster.Direct.Business.Activities
     /// <summary>
     /// 
     /// </summary>
-    public class HubsterActivityBusiness : HubsterActivityBase
+    public class HubsterActivityBusiness : HubsterActivityBase, IHubsterActivityBusiness
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterActivityBusiness"/> class.
@@ -39,11 +39,11 @@ namespace Hubster.Direct.Business.Activities
         /// </summary>
         /// <param name="authorizer">The authorizer.</param>
         /// <param name="conversationId">The conversation identifier.</param>
-        /// <param name="activityModel">The activity model.</param>
+        /// <param name="activity">The activity model.</param>
         /// <returns></returns>
-        public ApiResponse<DirectResponseModel> Send(IHubsterAuthorizer authorizer, Guid conversationId, DirectActivityModel activityModel)
+        public ApiResponse<DirectResponseModel> Send(IHubsterAuthorizer authorizer, Guid conversationId, DirectActivityModel activity)
         {
-            var apiResponse = _engineAccess.Send(authorizer, conversationId, activityModel, "business");
+            var apiResponse = _engineAccess.Send(authorizer, conversationId, activity, "business");
             return apiResponse;
         }
     }

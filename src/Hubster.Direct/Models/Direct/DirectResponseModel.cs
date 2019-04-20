@@ -1,13 +1,14 @@
-﻿using Hubster.Direct.Enums;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace Hubster.Direct.Models.Direct
 {
     public class DirectResponseModel
     {
         [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
-        public ResponseStatus Status { get; set; }
+        public HttpStatusCode Status { get; set; }
 
         [JsonProperty("event_id", NullValueHandling = NullValueHandling.Ignore)]
         public long? EventId { get; set; }
@@ -24,7 +25,7 @@ namespace Hubster.Direct.Models.Direct
         [JsonProperty("interaction_id", NullValueHandling = NullValueHandling.Ignore)]
         public Guid? InteractionId { get; set; }
 
-        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
-        public ErrorCodeModel Error { get; set; }
+        [JsonProperty("errors", NullValueHandling = NullValueHandling.Ignore)]
+        public List<ErrorCodeModel> Errors { get; set; }
     }
 }

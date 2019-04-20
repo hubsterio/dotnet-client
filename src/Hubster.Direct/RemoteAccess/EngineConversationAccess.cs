@@ -3,6 +3,7 @@ using Hubster.Direct.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 
 namespace Hubster.Direct.RemoteAccess
 {
@@ -25,7 +26,7 @@ namespace Hubster.Direct.RemoteAccess
         /// <param name="authorizer">The authorizer.</param>
         /// <param name="request">The request.</param>
         /// <returns></returns>
-        public ApiResponse<EstablishedConversationModel> EstablishConversation(IHubsterAuthorizer authorizer, EstablishConversationRequestModel request)
+        public ApiResponse<EstablishedConversationModel> Establish(IHubsterAuthorizer authorizer, EstablishConversationRequestModel request)
         {
             var apiResponse = new ApiResponse<EstablishedConversationModel>();
             if(authorizer.EnsureLifespan(apiResponse) == false)
@@ -54,7 +55,7 @@ namespace Hubster.Direct.RemoteAccess
         /// <param name="authorizer">The authorizer.</param>
         /// <param name="conversationId">The conversation identifier.</param>
         /// <returns></returns>
-        public ApiResponse<EstablishedConversationModel> GetEstablishedConversation(IHubsterAuthorizer authorizer, Guid conversationId)
+        public ApiResponse<EstablishedConversationModel> GetEstablished(IHubsterAuthorizer authorizer, Guid conversationId)
         {
             var apiResponse = new ApiResponse<EstablishedConversationModel>();
             if (authorizer.EnsureLifespan(apiResponse) == false)
@@ -70,6 +71,32 @@ namespace Hubster.Direct.RemoteAccess
 
             var restResponse = client.Execute(restRequest);
             apiResponse = ExtractResponse<EstablishedConversationModel>(restResponse);
+
+            return apiResponse;
+        }
+
+        /// <summary>
+        /// Gets all established by hub identifier.
+        /// </summary>
+        /// <param name="authorizer">The authorizer.</param>
+        /// <param name="hubId">The hub identifier.</param>
+        /// <returns></returns>
+        public ApiResponse<IEnumerable<EstablishedConversationModel>> GetAllEstablishedByHubId(IHubsterAuthorizer authorizer, Guid hubId)
+        {
+            var apiResponse = new ApiResponse<IEnumerable<EstablishedConversationModel>>();
+            if (authorizer.EnsureLifespan(apiResponse) == false)
+            {
+                return apiResponse;
+            }
+
+            var client = new RestClient(_hostUrl);
+            var restRequest = new RestRequest($"v1/api/conversations/hubs/{hubId}/established", Method.GET) { Timeout = 20000 };
+
+            restRequest.AddHeader("Content-Type", "application/json");
+            restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
+
+            var restResponse = client.Execute(restRequest);
+            apiResponse = ExtractResponse<IEnumerable<EstablishedConversationModel>>(restResponse);
 
             return apiResponse;
         }

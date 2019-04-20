@@ -9,7 +9,7 @@ namespace Hubster.Direct.Business.Activities
     /// <summary>
     /// 
     /// </summary>
-    public class HubsterActivityCustomer : HubsterActivityBase
+    public class HubsterActivityCustomer : HubsterActivityBase, IHubsterActivityCustomer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterActivityCustomer"/> class.

@@ -1,13 +1,14 @@
 ﻿using Hubster.Direct.Interfaces;
 using Hubster.Direct.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Hubster.Direct.Business.Conversations
 {
     /// <summary>
     /// 
     /// </summary>
-    public class HubsterConversationBusiness : HubsterConversationBase
+    public class HubsterConversationBusiness : HubsterConversationBase, IHubsterConversationBusiness
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterConversationBusiness" /> class.
@@ -24,7 +25,19 @@ namespace Hubster.Direct.Business.Conversations
         /// <returns></returns>
         public ApiResponse<EstablishedConversationModel> GetEstablished(IHubsterAuthorizer authorizer, Guid conversationId)
         {
-            var apiResponse = _engineAccess.GetEstablishedConversation(authorizer, conversationId);
+            var apiResponse = _engineAccess.GetEstablished(authorizer, conversationId);
+            return apiResponse;
+        }
+
+        /// <summary>
+        /// Gets all established by hub identifier.
+        /// </summary>
+        /// <param name="authorizer">The authorizer.</param>
+        /// <param name="hubId">The hub identifier.</param>
+        /// <returns></returns>
+        public ApiResponse<IEnumerable<EstablishedConversationModel>> GetAllEstablishedByHubId(IHubsterAuthorizer authorizer, Guid hubId)
+        {
+            var apiResponse = _engineAccess.GetAllEstablishedByHubId(authorizer, hubId);
             return apiResponse;
         }
     }
