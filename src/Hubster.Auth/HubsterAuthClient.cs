@@ -1,4 +1,5 @@
-﻿using Hubster.Auth.Models;
+﻿using Hubster.Auth.Interfaces;
+using Hubster.Auth.Models;
 using Hubster.Auth.RemoteAccess;
 using System;
 using System.Net;
@@ -14,8 +15,6 @@ namespace Hubster.Auth
         private readonly IdentityAccess _identityAccess;
         private readonly Func<HubsterAuthClient, IdentityResponse<IdentityToken>> _onAuthRequest;
 
-        public string HostUrl { get; private set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterAuthClient" /> class.
         /// </summary>
@@ -23,8 +22,7 @@ namespace Hubster.Auth
         /// <param name="hostUrl">The host URL.</param>
         public HubsterAuthClient(Func<HubsterAuthClient, IdentityResponse<IdentityToken>> onAuthRequest, string hostUrl = "https://identity.hubster.io")
         {
-            HostUrl = hostUrl;
-            _identityAccess = new IdentityAccess(HostUrl);
+            _identityAccess = new IdentityAccess(hostUrl);
             _onAuthRequest = onAuthRequest;            
         }
 

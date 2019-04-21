@@ -1,4 +1,5 @@
 ﻿using Hubster.Auth;
+using Hubster.Auth.Interfaces;
 using Hubster.Auth.Models;
 using Hubster.Direct.Interfaces;
 using Hubster.Direct.Models;
