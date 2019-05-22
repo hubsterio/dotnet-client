@@ -26,7 +26,7 @@ namespace TestHarnessCustomer
                     Profile = new Dictionary<string, string>
                     {
                         { "Device", "Web" },
-                        { "FullName", username },
+                        { "Full name", username },
                     }
                 }
             };
@@ -37,7 +37,7 @@ namespace TestHarnessCustomer
             var username = (string)null;
             if(converstion != null)
             {
-                username = converstion.Properties.Profile["FullName"];
+                username = converstion.Properties.Profile["Full name"];
             }
 
             return username;

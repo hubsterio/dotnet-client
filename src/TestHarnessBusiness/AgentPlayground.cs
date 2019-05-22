@@ -97,7 +97,7 @@ namespace TestHarnessBusiness
             var username = (string)null;
             if (converstion != null)
             {
-                username = converstion.Properties.Profile["FullName"];
+                username = converstion.Properties.Profile["Full name"];
             }
 
             return username;

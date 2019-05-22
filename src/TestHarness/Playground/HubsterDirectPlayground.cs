@@ -31,7 +31,7 @@ namespace TestHarness.Playground
             //        Profile = new Dictionary<string, string>
             //        {
             //            { "Device", "Web" },
-            //            { "FullName", "Ross Pellegrino-2" },
+            //            { "Full name", "Ross Pellegrino-2" },
             //        }
             //    }
             //});
