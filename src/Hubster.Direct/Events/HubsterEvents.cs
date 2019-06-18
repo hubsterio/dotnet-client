@@ -10,6 +10,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -110,16 +111,17 @@ namespace Hubster.Direct.Events
                 return apiResponse;
             }
 
+            var eventsUrl = new StringBuilder($"{_eventsUrl}/engine-chat-hub?iId={integrationId}");
+
+            if (conversationId != null)
+            {
+                eventsUrl.Append($"&cId={conversationId}");
+            }
+
             var connection = new HubConnectionBuilder()
-               .WithUrl($"{_eventsUrl}/engine-chat-hub", (config) =>
+               .WithUrl(eventsUrl.ToString(), (config) =>
                {
                    config.Headers.Add("Authorization", $"Bearer {authorizer.Token.AccessToken}");
-                   config.Headers.Add("x-hubster-integration-id", integrationId.ToString());
-
-                   if (conversationId != null)
-                   {
-                       config.Headers.Add("x-hubster-conversation-id", conversationId.ToString());
-                   }
                })
                .Build();
 
