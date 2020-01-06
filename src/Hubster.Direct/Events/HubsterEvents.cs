@@ -1,4 +1,7 @@
-﻿using Hubster.Direct.Enums;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Hubster.Direct.Enums;
 using Hubster.Direct.Interfaces;
 using Hubster.Direct.Models;
 using Hubster.Direct.Models.Direct;
@@ -101,7 +104,12 @@ namespace Hubster.Direct.Events
         /// <param name="onActivity">The on activity.</param>
         /// <param name="onError">The on error.</param>
         /// <returns></returns>
-        protected ApiResponse<HubConnection> Start(IHubsterAuthorizer authorizer, Guid integrationId, Guid? conversationId, Action<DirectActivityModel> onActivity, Action<ErrorCodeModel> onError)
+        protected ApiResponse<HubConnection> Start(
+            IHubsterAuthorizer authorizer, 
+            Guid integrationId, 
+            Guid? conversationId, 
+            Action<DirectActivityModel> onActivity, 
+            Action<ErrorCodeModel> onError)
         {
             var apiResponse = new ApiResponse<HubConnection>();
             authorizer.EnsureLifespan(apiResponse);     

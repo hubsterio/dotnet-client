@@ -1,4 +1,7 @@
-﻿using Hubster.Direct.Interfaces;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Hubster.Direct.Interfaces;
 using Hubster.Direct.Models;
 using Newtonsoft.Json;
 using RestSharp;

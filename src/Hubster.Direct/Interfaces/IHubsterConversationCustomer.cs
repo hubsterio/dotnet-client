@@ -1,4 +1,7 @@
-﻿using Hubster.Direct.Models;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Hubster.Direct.Models;
 
 namespace Hubster.Direct.Interfaces
 {

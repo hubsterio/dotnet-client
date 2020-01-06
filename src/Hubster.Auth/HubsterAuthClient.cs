@@ -1,4 +1,7 @@
-﻿using Hubster.Auth.Interfaces;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Hubster.Auth.Interfaces;
 using Hubster.Auth.Models;
 using Hubster.Auth.RemoteAccess;
 using System;

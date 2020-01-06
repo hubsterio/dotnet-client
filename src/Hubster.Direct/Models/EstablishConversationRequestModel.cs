@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Hubster.Direct.Models

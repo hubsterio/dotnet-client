@@ -1,4 +1,7 @@
-﻿using Hubster.Direct.Business.Activities;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Hubster.Direct.Business.Activities;
 using Hubster.Direct.Business.Conversations;
 using Hubster.Direct.Events;
 

@@ -1,4 +1,7 @@
-﻿namespace Hubster.Direct.Enums
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+namespace Hubster.Direct.Enums
 {
     public enum IntegrationType
     {

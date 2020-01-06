@@ -1,4 +1,7 @@
-﻿using Hubster.Direct.Business.Resources;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Hubster.Direct.Business.Resources;
 
 namespace Hubster.Direct
 {

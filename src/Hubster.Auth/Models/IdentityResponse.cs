@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using System.Net;
 
 namespace Hubster.Auth.Models
 {

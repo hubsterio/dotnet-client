@@ -1,4 +1,7 @@
-﻿using Hubster.Auth;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Hubster.Auth;
 using Hubster.Auth.Interfaces;
 using Hubster.Auth.Models;
 using Hubster.Direct.Models;

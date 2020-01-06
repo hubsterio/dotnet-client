@@ -1,4 +1,7 @@
-﻿using Hubster.Direct.Enums;
+﻿// Hubster 
+// Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
+
+using Hubster.Direct.Enums;
 using Newtonsoft.Json;
 using System;
 
