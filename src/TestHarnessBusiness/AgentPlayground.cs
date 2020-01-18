@@ -273,7 +273,7 @@ namespace TestHarnessBusiness
                 {
                     Sender = new DirectSourceModel
                     {
-                        IntegrationId = Guid.Parse(_agentIntegrationId)
+                        IntegrationId = _agentIntegrationId
                     },
                     Message = new DirectMessageModel
                     {
@@ -296,7 +296,7 @@ namespace TestHarnessBusiness
                 return apiResponse;
             });
 
-            var client = new HubsterDirectClientBusiness("http://localhost:8251", "http://localhost:8082");
+            var client = new HubsterDirectClientBusiness("http://localhost:5002", "http://localhost:5005");
             var authorizer = new HubsterAuthorizer(auth);
 
             while(true)
@@ -310,10 +310,15 @@ namespace TestHarnessBusiness
                 Console.Clear();
                 var username = GetUserName(_lastConverstion);
 
-                var eventResponse = client.Events.Start(authorizer, Guid.Parse(_agentIntegrationId),
-                    activity => Display(activity),
-                    error => Display(error.Description, ConsoleColor.Yellow)
-                );
+                var eventResponse = client.Events.Start(options =>
+                {
+                    options.Authorizer = authorizer;
+                    options.IntegrationId = Guid.Parse(_agentIntegrationId);
+                    options.OnConnected = () => Display("Connected", ConsoleColor.Cyan);
+                    options.OnDisconnected = () => Display("Disconnected", ConsoleColor.Yellow);
+                    options.OnActivity = (activity) => Display(activity);
+                    options.OnError = (error) => Display(error.Description, ConsoleColor.Yellow);
+                });
 
                 if (eventResponse.StatusCode != HttpStatusCode.OK)
                 {

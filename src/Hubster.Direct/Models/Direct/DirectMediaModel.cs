@@ -10,7 +10,7 @@ namespace Hubster.Direct.Models.Direct
         [JsonProperty("mime_type", NullValueHandling = NullValueHandling.Ignore)]
         public string MimeType { get; set; }
 
-        [JsonProperty("storage_id", NullValueHandling = NullValueHandling.Ignore)]
-        public string StorageId { get; set; }        
+        [JsonProperty("storage_path", NullValueHandling = NullValueHandling.Ignore)]
+        public string StoragePath { get; set; }        
     }
 }

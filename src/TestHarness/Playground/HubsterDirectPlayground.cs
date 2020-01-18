@@ -88,7 +88,7 @@ namespace TestHarness.Playground
                 {
                     Sender = new DirectSourceModel
                     {
-                        IntegrationId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                        IntegrationId = "00000000-0000-0000-0000-000000000002",
                     },
                     Message = new DirectMessageModel
                     {

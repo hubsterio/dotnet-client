@@ -268,7 +268,7 @@ namespace TestHarnessCustomer
                 return apiResponse;
             });
 
-            var client = new HubsterDirectClientCustomer("http://localhost:8251", "http://localhost:8082");
+            var client = new HubsterDirectClientCustomer("http://localhost:5002", "http://localhost:5005");
             var authorizer = new HubsterAuthorizer(auth);
 
             while (true)
@@ -282,10 +282,16 @@ namespace TestHarnessCustomer
                 Console.Clear();
                 var username = GetUserName(_lastConverstion);
 
-                var eventResponse = client.Events.Start(authorizer, _lastConverstion,
-                    activity => Display(activity),
-                    error => Display(error.Description, ConsoleColor.Yellow)
-                );
+                var eventResponse = client.Events.Start(options =>
+                {
+                    options.Authorizer = authorizer;
+                    options.IntegrationId = _lastConverstion.IntegrationId.Value;
+                    options.ConversationId = _lastConverstion?.ConversationId;
+                    options.OnActivity = (activity) => Display(activity);
+                    options.OnConnected = () => Display("Connected", ConsoleColor.Cyan);
+                    options.OnDisconnected = () => Display("Disconnected", ConsoleColor.Yellow);
+                    options.OnError = (error) => Display(error.Description, ConsoleColor.Yellow);
+                });
 
                 if (eventResponse.StatusCode != HttpStatusCode.OK)
                 {

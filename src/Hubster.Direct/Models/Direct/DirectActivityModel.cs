@@ -14,6 +14,9 @@ namespace Hubster.Direct.Models.Direct
         [JsonProperty("event_id", NullValueHandling = NullValueHandling.Ignore)]
         public long? EventId { get; set; }
 
+        [JsonProperty("flow_process", NullValueHandling = NullValueHandling.Ignore)]
+        public ActivityFlowProcessType? FlowProcess { get; set; }
+
         [JsonProperty("sender", NullValueHandling = NullValueHandling.Ignore)]
         public DirectSourceModel Sender { get; set; }
 
@@ -28,8 +31,5 @@ namespace Hubster.Direct.Models.Direct
 
         [JsonProperty("sender_action", NullValueHandling = NullValueHandling.Ignore)]
         public DirectSenderActionModel SenderAction { get; set; }
-
-        [JsonProperty("flow_process", NullValueHandling = NullValueHandling.Ignore)]
-        public ActivityFlowProcessType? FlowProcess { get; set; }
     }
 }

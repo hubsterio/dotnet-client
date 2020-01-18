@@ -1,7 +1,6 @@
 ﻿// Hubster 
 // Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
 
-using Hubster.Direct.Enums;
 using Hubster.Direct.Interfaces;
 using Hubster.Direct.Models;
 using Hubster.Direct.Models.Direct;
@@ -13,6 +12,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +22,7 @@ namespace Hubster.Direct.Events
     /// <summary>
     /// 
     /// </summary>
-    public abstract class HubsterEventsBase
+    public abstract class HubsterEventsBase : IHubsterEventsBase
     {
         private readonly string _eventsUrl;
 
@@ -39,16 +39,16 @@ namespace Hubster.Direct.Events
         /// Starts the specified connection.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        /// <param name="onError">The on error.</param>
+        /// <param name="options">The options.</param>
         /// <param name="delay">if set to <c>true</c> [delay].</param>
         /// <returns></returns>
-        private ApiResponse Start(HubConnection connection, Action<ErrorCodeModel> onError = null, bool delay = false)
+        private ApiResponse Start(HubConnection connection, StartOptions options = null, bool delay = false)
         {
             var apiResponse = new ApiResponse { StatusCode = HttpStatusCode.OK };
 
             while (true)
             {
-                if(delay)
+                if (delay)
                 {
                     Thread.Sleep(new Random().Next(1, 5) * 1000);
                     delay = false;
@@ -57,12 +57,16 @@ namespace Hubster.Direct.Events
                 try
                 {
                     connection.StartAsync().GetAwaiter().GetResult();
+                    options.OnConnected?.Invoke();
                     break;
                 }
                 catch (Exception ex)
-                when (ex?.InnerException is IOException || ex?.InnerException is SocketException)
+                when (ex?.InnerException is IOException 
+                || ex?.InnerException is SocketException
+                || ex?.InnerException is WebSocketException)
                 {
                     delay = true;
+                    options.OnDisconnected?.Invoke();                   
                     continue;
                 }
                 catch (HttpRequestException ex)
@@ -87,9 +91,9 @@ namespace Hubster.Direct.Events
                 }
             }
 
-            if(apiResponse.StatusCode != HttpStatusCode.OK)
+            if (apiResponse.StatusCode != HttpStatusCode.OK)
             {
-                onError?.Invoke(apiResponse.Errors[0]);
+                options.OnError?.Invoke(apiResponse.Errors[0]);
             }
 
             return apiResponse;
@@ -98,44 +102,38 @@ namespace Hubster.Direct.Events
         /// <summary>
         /// Starts the specified authorizer.
         /// </summary>
-        /// <param name="authorizer">The authorizer.</param>
-        /// <param name="integrationId">The integration identifier.</param>
-        /// <param name="conversationId">The conversation identifier.</param>
-        /// <param name="onActivity">The on activity.</param>
-        /// <param name="onError">The on error.</param>
+        /// <param name="start">The start.</param>
         /// <returns></returns>
-        protected ApiResponse<HubConnection> Start(
-            IHubsterAuthorizer authorizer, 
-            Guid integrationId, 
-            Guid? conversationId, 
-            Action<DirectActivityModel> onActivity, 
-            Action<ErrorCodeModel> onError)
+        public ApiResponse<HubConnection> Start(Action<StartOptions> start)
         {
+            var options = new StartOptions();
+            start(options);
+
             var apiResponse = new ApiResponse<HubConnection>();
-            authorizer.EnsureLifespan(apiResponse);     
-            
-            if(apiResponse.StatusCode != HttpStatusCode.OK)
+            options.Authorizer.EnsureLifespan(apiResponse);
+
+            if (apiResponse.StatusCode != HttpStatusCode.OK)
             {
                 return apiResponse;
             }
 
-            var eventsUrl = new StringBuilder($"{_eventsUrl}/engine-chat-hub?iId={integrationId}");
+            var eventsUrl = new StringBuilder($"{_eventsUrl}/engine-chat-hub?iId={options.IntegrationId}");
 
-            if (conversationId != null)
+            if (options.ConversationId != null)
             {
-                eventsUrl.Append($"&cId={conversationId}");
+                eventsUrl.Append($"&cId={options.ConversationId}");
             }
 
             var connection = new HubConnectionBuilder()
                .WithUrl(eventsUrl.ToString(), (config) =>
                {
-                   config.Headers.Add("Authorization", $"Bearer {authorizer.Token.AccessToken}");
+                   config.Headers.Add("Authorization", $"Bearer {options.Authorizer.Token.AccessToken}");
                })
                .Build();
 
             connection.On<DirectActivityModel>("ReceiveDirectActivities", (message) =>
             {
-                onActivity?.Invoke(message);
+                options.OnActivity?.Invoke(message);
             });
 
             connection.Closed += (error) =>
@@ -146,9 +144,12 @@ namespace Hubster.Direct.Events
                 }
 
                 if (error?.InnerException is IOException
-                || error?.InnerException is SocketException)
+                || error?.InnerException is SocketException
+                || error?.InnerException is WebSocketException)
                 {
-                    Start(connection, onError, true);
+                    options.OnDisconnected?.Invoke();
+
+                    Start(connection, options, true);
                     return Task.CompletedTask;
                 }
                 else if (error is HubException)
@@ -162,7 +163,7 @@ namespace Hubster.Direct.Events
                         var errorCode = errorMessage.Substring(firstBraceIdx, lastBraceIdx - firstBraceIdx);
                         var errorDescription = errorMessage.Substring(lastBraceIdx + 3);
 
-                        onError(new ErrorCodeModel
+                        options.OnError?.Invoke(new ErrorCodeModel
                         {
                             Code = int.Parse(errorCode),
                             Description = errorDescription
@@ -171,8 +172,8 @@ namespace Hubster.Direct.Events
                         return Task.CompletedTask;
                     }
                 }
-
-                onError(new ErrorCodeModel
+                
+                options.OnError?.Invoke(new ErrorCodeModel
                 {
                     Code = (int)HttpStatusCode.BadRequest,
                     Description = error.Message
@@ -183,7 +184,7 @@ namespace Hubster.Direct.Events
 
             apiResponse.Content = connection;
 
-            var startResponse = Start(connection);
+            var startResponse = Start(connection, options);
             if(startResponse.StatusCode != HttpStatusCode.OK)
             {
                 apiResponse.StatusCode = startResponse.StatusCode;
