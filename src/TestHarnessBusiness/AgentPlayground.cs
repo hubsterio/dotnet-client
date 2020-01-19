@@ -275,9 +275,7 @@ namespace TestHarnessBusiness
                     continue;
                 }
 
-                var apiResponse = (ApiResponse<DirectResponseModel>)null;
-
-                apiResponse = client.Activity.Send(authorizer, conversation.ConversationId.Value, new DirectActivityModel
+                var apiResponse = client.Activity.Send(authorizer, conversation.ConversationId.Value, new DirectActivityModel
                 {
                     Sender = new DirectSourceModel
                     {

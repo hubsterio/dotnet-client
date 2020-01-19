@@ -38,7 +38,7 @@ namespace Hubster.Direct.RemoteAccess
             }
 
             var client = new RestClient(_hostUrl);
-            var restRequest = new RestRequest("v1/api/conversations/establish", Method.POST) { Timeout = 20000 };
+            var restRequest = new RestRequest("/api/v1/conversations/establish", Method.POST) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
             restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
@@ -67,7 +67,7 @@ namespace Hubster.Direct.RemoteAccess
             }
 
             var client = new RestClient(_hostUrl);
-            var restRequest = new RestRequest($"v1/api/conversations/{conversationId}/established", Method.GET) { Timeout = 20000 };
+            var restRequest = new RestRequest($"/api/v1/conversations/{conversationId}/established", Method.GET) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
             restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
@@ -93,7 +93,7 @@ namespace Hubster.Direct.RemoteAccess
             }
 
             var client = new RestClient(_hostUrl);
-            var restRequest = new RestRequest($"v1/api/conversations/hubs/{hubId}/established", Method.GET) { Timeout = 20000 };
+            var restRequest = new RestRequest($"/api/v1/conversations/hubs/{hubId}/established", Method.GET) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
             restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
