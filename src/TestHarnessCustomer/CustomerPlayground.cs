@@ -195,17 +195,20 @@ namespace TestHarnessCustomer
                 DisplaySimpleText($"'{lastUser ?? "You must first establish conversation!"}'", ConsoleColor.Yellow);
                 Console.WriteLine();
                 Console.WriteLine($"3. List interactions");
-                Console.WriteLine($"4. Quit (q or quit)");
+                Console.WriteLine($"4. Clear (clear screen)");
+                Console.WriteLine($"5. Quit (q or quit)");
 
                 var selection = Console.ReadLine().ToLower();
 
-                if (string.IsNullOrWhiteSpace(selection))
+                if (string.IsNullOrWhiteSpace(selection)
+                || selection == "4"
+                || selection == "clear")
                 {
                     Console.Clear();
                     continue;
                 }
 
-                if (selection == "4"
+                if (selection == "5"
                 || selection == "q"
                 || selection == "quit")
                 {
