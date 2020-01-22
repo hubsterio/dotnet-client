@@ -2,8 +2,8 @@
 // Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
 
 using Hubster.Direct.Interfaces;
-using Hubster.Direct.Models;
-using Hubster.Direct.Models.Direct;
+using Hubster.Abstractions.Models;
+using Hubster.Abstractions.Models.Direct;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;

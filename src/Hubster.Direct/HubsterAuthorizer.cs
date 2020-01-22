@@ -5,7 +5,7 @@ using Hubster.Auth;
 using Hubster.Auth.Interfaces;
 using Hubster.Auth.Models;
 using Hubster.Direct.Interfaces;
-using Hubster.Direct.Models;
+using Hubster.Abstractions.Models;
 using System.Collections.Generic;
 using System.Net;
 

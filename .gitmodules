@@ -1,3 +1,4 @@
 [submodule "src/Hubster.Abstractions"]
 	path = src/Hubster.Abstractions
 	url = https://github.com/hubsterio/Hubster.Abstractions.git
+	branch = develop

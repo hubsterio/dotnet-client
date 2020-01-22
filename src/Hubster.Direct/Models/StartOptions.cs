@@ -1,8 +1,8 @@
 ﻿using Hubster.Direct.Interfaces;
-using Hubster.Direct.Models.Direct;
+using Hubster.Abstractions.Models.Direct;
 using System;
 
-namespace Hubster.Direct.Models
+namespace Hubster.Abstractions.Models
 {
     public class StartOptions
     {

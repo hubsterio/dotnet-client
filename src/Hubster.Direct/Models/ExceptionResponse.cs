@@ -3,7 +3,7 @@
 
 using Newtonsoft.Json;
 
-namespace Hubster.Direct.Models
+namespace Hubster.Abstractions.Models
 {
     public class ExceptionResponse : ApiResponse
     {

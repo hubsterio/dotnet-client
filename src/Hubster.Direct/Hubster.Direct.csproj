@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Hubster.Abstractions\Hubster.Abstractions\Hubster.Abstractions.csproj" />
     <ProjectReference Include="..\Hubster.Auth\Hubster.Auth.csproj" />
   </ItemGroup>
 

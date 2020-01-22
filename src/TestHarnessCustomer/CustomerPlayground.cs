@@ -1,8 +1,8 @@
 ﻿using Hubster.Auth;
 using Hubster.Direct;
-using Hubster.Direct.Enums;
-using Hubster.Direct.Models;
-using Hubster.Direct.Models.Direct;
+using Hubster.Abstractions.Enums;
+using Hubster.Abstractions.Models;
+using Hubster.Abstractions.Models.Direct;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

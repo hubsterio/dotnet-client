@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
 
-namespace Hubster.Direct.Models
+namespace Hubster.Abstractions.Models
 {
     public class ApiResponse
     {
