@@ -5,9 +5,10 @@
 
 trigger:
 - master
-
+  
 pool:
-  vmImage: 'windows-latest'
+  # vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   buildConfiguration: 'Release'
@@ -16,21 +17,20 @@ steps:
 - checkout: self
   submodules: true
 
-- task: DotNetCoreCLI@2
+- task: Restore packages
   inputs:
     command: 'restore'
     feedsToUse: 'select'
 
-
-- task: DotNetCoreCLI@2
+- task: Building
   inputs:
     command: 'build'
 
-- task: DotNetCoreCLI@2
+- task: Tests
   inputs:
     command: 'test'
 
-- task: DotNetCoreCLI@2
+- task: Packing
   inputs:
     command: 'pack'
     packagesToPack: '**/*.csproj'
