@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hubster.Auth", "src\Hubster
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. Solution Items", "00. Solution Items", "{C402724C-8563-473A-8BC9-2A1D4965C7ED}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
 		Hubster.licenseheader = Hubster.licenseheader
 		README.md = README.md
 	EndProjectSection

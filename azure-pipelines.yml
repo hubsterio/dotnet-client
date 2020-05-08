@@ -1,0 +1,22 @@
+trigger:
+- master
+  
+pool:  
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- checkout: self
+  submodules: true
+
+- task: DotNetCoreCLI@2
+  name: Building
+  inputs:
+    command: 'build'
+
+- task: DotNetCoreCLI@2
+  name: Testing
+  inputs:  
+    command: 'test'
