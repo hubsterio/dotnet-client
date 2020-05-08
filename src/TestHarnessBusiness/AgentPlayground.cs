@@ -295,14 +295,14 @@ namespace TestHarnessBusiness
         }
         public static void Run()
         {
-            var auth = new HubsterAuthClient(hostUrl: "http://localhost:5000", onAuthRequest: (authClient) =>
+            var auth = new HubsterAuthClient(hostUrl: "http://host.docker.internal:5000", onAuthRequest: (authClient) =>
             {
                 // typically this will be a call to some backend service that will return back the token
                 var apiResponse = authClient.GetClientToken("hubster.engine.api.00000000000000000000000000000001", "9c5Vbnd0vZGlqTdBzhz9hb9cQ0M=");
                 return apiResponse;
             });
 
-            var client = new HubsterDirectClientBusiness("http://localhost:5002", "http://localhost:5005");
+            var client = new HubsterDirectClientBusiness("http://host.docker.internal:5002", "http://host.docker.internal:5005");
             var authorizer = new HubsterAuthorizer(auth);
 
             while(true)
