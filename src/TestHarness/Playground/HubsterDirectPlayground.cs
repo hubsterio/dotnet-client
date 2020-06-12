@@ -69,7 +69,7 @@ namespace TestHarness.Playground
             {
                 var actResponse = direct.Activity.Send(authorizer, conResponse.Content, new DirectActivityModel
                 {
-                    Message = new DirectMessageModel
+                    Message = new DirectTextMessageModel
                     {
                         Text = "Hello from Customer TestPlayGround "
                     },
@@ -90,7 +90,7 @@ namespace TestHarness.Playground
                     {
                         IntegrationId = "00000000-0000-0000-0000-000000000002",
                     },
-                    Message = new DirectMessageModel
+                    Message = new DirectTextMessageModel
                     {
                         Text = "Hello from Business TestPlayGround "
                     },

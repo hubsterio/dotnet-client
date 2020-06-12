@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Net;
+using Hubster.Abstractions.Constants;
 
 namespace TestHarnessBusiness
 {
@@ -97,7 +98,9 @@ namespace TestHarnessBusiness
             var username = (string)null;
             if (converstion != null)
             {
-                username = converstion.Properties.Profile["Full name"];
+                username = converstion.Properties.Profile.ContainsKey(ContactTypes.FullName)
+                    ? converstion.Properties.Profile[ContactTypes.FullName]
+                    : "No name";
             }
 
             return username;
@@ -281,7 +284,7 @@ namespace TestHarnessBusiness
                     {
                         IntegrationId = _agentIntegrationId
                     },
-                    Message = new DirectMessageModel
+                    Message = new DirectTextMessageModel
                     {
                         Text = message
                     },

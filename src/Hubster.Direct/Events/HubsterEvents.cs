@@ -17,6 +17,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Hubster.Abstractions.Converters;
 
 namespace Hubster.Direct.Events
 {
@@ -107,6 +110,10 @@ namespace Hubster.Direct.Events
         /// <returns></returns>
         public ApiResponse<HubConnection> Start(Action<StartOptions> start)
         {
+            var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+            jsonSerializerSettings.Converters.Add(new DirectMessageJsonConverter());
+            JsonConvert.DefaultSettings = () => jsonSerializerSettings;
+
             var options = new StartOptions();
             start(options);
 
@@ -128,9 +135,12 @@ namespace Hubster.Direct.Events
             var connection = new HubConnectionBuilder()
                .WithUrl(eventsUrl.ToString(), (config) =>
                {
-                   config.Headers.Add("Authorization", $"Bearer {options.Authorizer.Token.AccessToken}");                   
+                   config.Headers.Add("Authorization", $"Bearer {options.Authorizer.Token.AccessToken}");
                })
-               .AddNewtonsoftJsonProtocol()
+               .AddNewtonsoftJsonProtocol(protocol =>
+               {
+                   protocol.PayloadSerializerSettings = jsonSerializerSettings;
+               })
                .Build();
 
             connection.On<DirectActivityModel>("ReceiveDirectActivities", (message) =>

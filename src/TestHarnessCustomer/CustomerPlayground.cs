@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Hubster.Abstractions.Constants;
 
 namespace TestHarnessCustomer
 {
@@ -25,8 +26,8 @@ namespace TestHarnessCustomer
                 {
                     Profile = new Dictionary<string, string>
                     {
-                        { "Device", "Web" },
-                        { "Full name", username },
+                        { ContactTypes.Device, "Web" },
+                        { ContactTypes.FullName, username },
                     }
                 }
             };
@@ -37,7 +38,9 @@ namespace TestHarnessCustomer
             var username = (string)null;
             if(converstion != null)
             {
-                username = converstion.Properties.Profile["Full name"];
+                username = converstion.Properties.Profile.ContainsKey(ContactTypes.FullName)
+                    ? converstion.Properties.Profile[ContactTypes.FullName]
+                    : "No name";
             }
 
             return username;
@@ -143,7 +146,7 @@ namespace TestHarnessCustomer
 
                 var apiResponse = client.Activity.Send(authorizer, conversation, new DirectActivityModel
                 {
-                    Message = new DirectMessageModel
+                    Message = new DirectTextMessageModel
                     {
                         Text = message
                     },
