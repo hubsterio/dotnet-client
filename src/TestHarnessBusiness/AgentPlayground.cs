@@ -125,8 +125,8 @@ namespace TestHarnessBusiness
                     Console.WriteLine("Pick one of the following established conversations:");
 
                     var i = 1;
-                    foreach (var conversation in apiResponse.Content)
-                    {
+                    foreach (var conversation in apiResponse.Content.OrderByDescending(x => x.OpenedDateTime))
+                    {                        
                         Console.WriteLine($"{i++}. {conversation.ConversationId} - {GetUserName(conversation)}");
                     }
 
