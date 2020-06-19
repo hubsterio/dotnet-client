@@ -13,18 +13,7 @@ namespace Hubster.Direct.RemoteAccess
     /// 
     /// </summary>
     internal abstract class EngineBaseAccess
-    {
-        protected readonly string _hostUrl;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EngineBaseAccess" /> class.
-        /// </summary>
-        /// <param name="hostUrl">The host URL.</param>
-        public EngineBaseAccess(string hostUrl)
-        {
-            _hostUrl = hostUrl;
-        }
-
+    {     
         /// Extracts the response.
         /// </summary>
         /// <typeparam name="T"></typeparam>

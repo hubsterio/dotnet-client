@@ -96,7 +96,7 @@ namespace Hubster.Auth.RemoteAccess
 
                 if (apiResponse.Token.Expires != null)
                 {
-                    apiResponse.Token.ExpireTime = DateTimeOffset.UtcNow.AddSeconds(apiResponse.Token.Expires.Value);
+                    apiResponse.Token.ExpireTime = DateTimeOffset.UtcNow.AddMinutes(apiResponse.Token.Expires.Value);
                 }
             }
             else

@@ -17,12 +17,17 @@ namespace Hubster.Direct.RemoteAccess
     /// </summary>
     internal class EngineActivityAccess : EngineBaseAccess
     {
+        private readonly string _origin;
+        private readonly string _hostUrl;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineActivityAccess" /> class.
         /// </summary>
         /// <param name="hostUrl">The host URL.</param>
-        public EngineActivityAccess(string hostUrl) : base(hostUrl)
+        public EngineActivityAccess(string origin, string hostUrl) 
         {
+            _origin = origin;
+            _hostUrl = hostUrl;
         }
 
         /// <summary>
@@ -45,7 +50,8 @@ namespace Hubster.Direct.RemoteAccess
             var restRequest = new RestRequest($"/api/v1/interactions/activities/{conversationId}", Method.GET) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
-            restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
+            restRequest.AddHeader("Authorization", $"{authorizer.Token.TokenType} {authorizer.Token.AccessToken}");
+            restRequest.AddHeader("Origin", _origin);
 
             restRequest.AddParameter("leid", lastEventId);
             restRequest.AddParameter("type", type.ToString());
@@ -72,11 +78,18 @@ namespace Hubster.Direct.RemoteAccess
                 return apiResponse;
             }
 
+            var url = $"/inbound/{path}/v1/direct/activity/{conversationId}";
+            if(authorizer.Token.TokenType == "WebBearer")
+            {
+                url = $"/inbound/customer/v1/web-chat/{conversationId}";
+            }
+
             var client = new RestClient(_hostUrl);
-            var restRequest = new RestRequest($"/inbound/{path}/v1/direct/activity/{conversationId}", Method.POST) { Timeout = 20000 };
+            var restRequest = new RestRequest(url, Method.POST) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
-            restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
+            restRequest.AddHeader("Authorization", $"{authorizer.Token.TokenType} {authorizer.Token.AccessToken}");
+            restRequest.AddHeader("Origin", _origin);
 
             var body = JsonConvert.SerializeObject(activity);
             restRequest.AddParameter("application/json", body, ParameterType.RequestBody);

@@ -15,10 +15,11 @@ namespace Hubster.Direct.Business.Resources
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterResource" /> class.
         /// </summary>
+        /// <param name="origin">The origin.</param>
         /// <param name="directUrl">The host URL.</param>
-        internal HubsterResource(string directUrl)
+        internal HubsterResource(string origin, string directUrl)
         {            
-            _engineAccess = new EngineResourceAccess(directUrl);
+            _engineAccess = new EngineResourceAccess(origin, directUrl);
         }
     }
 }

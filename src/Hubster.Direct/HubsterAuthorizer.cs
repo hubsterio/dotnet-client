@@ -1,11 +1,10 @@
 ﻿// Hubster 
 // Copyright (c) 2020 Hubster Solutions Inc. All rights reserved.
 
-using Hubster.Auth;
+using Hubster.Abstractions.Models;
 using Hubster.Auth.Interfaces;
 using Hubster.Auth.Models;
 using Hubster.Direct.Interfaces;
-using Hubster.Abstractions.Models;
 using System.Collections.Generic;
 using System.Net;
 
@@ -17,7 +16,7 @@ namespace Hubster.Direct
     /// <seealso cref="Hubster.Direct.Interfaces.IHubsterAuthorizer" />
     public class HubsterAuthorizer : IHubsterAuthorizer
     {
-        public IHubsterAuthClient AuthClient { get; private set; }
+        public IHubsterAuth AuthClient { get; private set; }
         public IdentityToken Token { get; private set; }
 
         /// <summary>
@@ -25,7 +24,7 @@ namespace Hubster.Direct
         /// </summary>
         /// <param name="authClient">The authentication client.</param>
         /// <param name="token">The token.</param>
-        public HubsterAuthorizer(IHubsterAuthClient authClient, IdentityToken token = null)
+        public HubsterAuthorizer(IHubsterAuth authClient, IdentityToken token = null)
         {
             AuthClient = authClient;
             Token = token;

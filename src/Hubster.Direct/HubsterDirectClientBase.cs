@@ -10,16 +10,16 @@ namespace Hubster.Direct
     /// </summary>
     public abstract class HubsterDirectClientBase
     {
-        public HubsterResource Resource { get; private set; }        
+        public HubsterResource Resource { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterDirectClientBase" /> class.
         /// </summary>
+        /// <param name="origin">The origin.</param>
         /// <param name="directUrl">The host URL.</param>
-        /// <param name="eventsUrl">The events URL.</param>
-        public HubsterDirectClientBase(string directUrl = "https://direct.hubster.io", string eventsUrl = "https://events.hubster.io")
+        public HubsterDirectClientBase(string origin, string directUrl = "https://direct.hubster.io")
         {
-            Resource = new HubsterResource(directUrl);
+            Resource = new HubsterResource(origin, directUrl);
         }
     }
 }

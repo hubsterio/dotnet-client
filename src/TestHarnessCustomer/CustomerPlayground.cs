@@ -15,13 +15,15 @@ namespace TestHarnessCustomer
     public static class CustomerPlayground
     {
         private static EstablishedConversationModel _lastConverstion = null;
+        private static Guid _integrationId = Guid.Parse("00000000-0000-0000-0000-000000000020");
 
-        private static EstablishConversationRequestModel GetCustomerConversationRequestModel(string username)
+        private static EstablishConversationRequestModel GetCustomerConversationRequestModel(string username, ChannelType channelType)
         {
             return new EstablishConversationRequestModel
             {
-                IntegrationId = "00000000-0000-0000-0000-000000000020",
+                IntegrationId = _integrationId.ToString(),
                 Binding = username,
+                ChannelType = channelType,
                 Properties = new ConversationPropertiesModel
                 {
                     Profile = new Dictionary<string, string>
@@ -169,7 +171,7 @@ namespace TestHarnessCustomer
                 return true;
             }
 
-            var conversationResponse = client.Conversation.Establish(authorizer, GetCustomerConversationRequestModel(username));
+            var conversationResponse = client.Conversation.Establish(authorizer, GetCustomerConversationRequestModel(username, ChannelType.WebChat));
             if (conversationResponse.StatusCode != HttpStatusCode.OK)
             {
                 Console.WriteLine();
@@ -265,14 +267,17 @@ namespace TestHarnessCustomer
 
         public static void Run()
         {
+            var origin = "http://localhost";
+            
             var auth = new HubsterAuthClient(hostUrl: "http://host.docker.internal:5000", onAuthRequest: (authClient) =>
             {
                 // typically this will be a call to some backend service that will return back the token
                 var apiResponse = authClient.GetClientToken("hubster.engine.api.00000000000000000000000000000001", "9c5Vbnd0vZGlqTdBzhz9hb9cQ0M=");
                 return apiResponse;
             });
-
-            var client = new HubsterDirectClientCustomer("http://host.docker.internal:5002", "http://host.docker.internal:5005");
+            
+            // var auth = new HubsterAuthWebChat(_integrationId, origin, "http://host.docker.internal:5002");
+            var client = new HubsterDirectClientCustomer(origin, "http://host.docker.internal:5002", "http://host.docker.internal:5005");
             var authorizer = new HubsterAuthorizer(auth);
 
             while (true)
@@ -289,6 +294,7 @@ namespace TestHarnessCustomer
                 var eventResponse = client.Events.Start(options =>
                 {
                     options.Authorizer = authorizer;
+                    options.Origin = origin;
                     options.IntegrationId = _lastConverstion.IntegrationId.Value;
                     options.ConversationId = _lastConverstion?.ConversationId;
                     options.OnActivity = (activity) => Display(activity);

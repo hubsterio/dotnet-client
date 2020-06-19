@@ -15,10 +15,11 @@ namespace Hubster.Direct.Business.Activities
     public class HubsterActivityCustomer : HubsterActivityBase, IHubsterActivityCustomer
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HubsterActivityCustomer"/> class.
+        /// Initializes a new instance of the <see cref="HubsterActivityCustomer" /> class.
         /// </summary>
+        /// <param name="origin"></param>
         /// <param name="directUrl">The direct URL.</param>
-        internal HubsterActivityCustomer(string directUrl) : base(directUrl)
+        internal HubsterActivityCustomer(string origin, string directUrl) : base(origin, directUrl)
         {            
         }
 
@@ -44,7 +45,7 @@ namespace Hubster.Direct.Business.Activities
         /// <returns></returns>
         public ApiResponse<DirectResponseModel> Send(IHubsterAuthorizer authorizer, EstablishedConversationModel conversation, DirectActivityModel activity)
         {
-            var apiResponse = _engineAccess.Send(authorizer, conversation.ConversationId.Value, activity, "Customer");
+            var apiResponse = _engineAccess.Send(authorizer, conversation.ConversationId.Value, activity, "customer");
             return apiResponse;
         }
     }

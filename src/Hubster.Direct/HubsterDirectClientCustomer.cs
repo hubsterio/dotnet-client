@@ -22,12 +22,13 @@ namespace Hubster.Direct
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterDirectClientCustomer" /> class.
         /// </summary>
+        /// <param name="origin">The origin.</param>
         /// <param name="directUrl">The host URL.</param>
         /// <param name="eventsUrl">The events URL.</param>
-        public HubsterDirectClientCustomer(string directUrl = "https://direct.hubster.io", string eventsUrl = "https://events.hubster.io")
+        public HubsterDirectClientCustomer(string origin, string directUrl = "https://direct.hubster.io", string eventsUrl = "https://events.hubster.io") : base(directUrl)
         {
-            Conversation = new HubsterConversationCustomer(directUrl);
-            Activity = new HubsterActivityCustomer(directUrl);
+            Conversation = new HubsterConversationCustomer(origin, directUrl);
+            Activity = new HubsterActivityCustomer(origin, directUrl);
             Events = new HubsterEventsCustomer(eventsUrl);
         }
     }

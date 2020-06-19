@@ -135,7 +135,8 @@ namespace Hubster.Direct.Events
             var connection = new HubConnectionBuilder()
                .WithUrl(eventsUrl.ToString(), (config) =>
                {
-                   config.Headers.Add("Authorization", $"Bearer {options.Authorizer.Token.AccessToken}");
+                   config.Headers.Add("Authorization", $"{options.Authorizer.Token.TokenType} {options.Authorizer.Token.AccessToken}");
+                   config.Headers.Add("Origin", options.Origin);
                })
                .AddNewtonsoftJsonProtocol(protocol =>
                {

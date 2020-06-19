@@ -20,7 +20,7 @@ namespace TestHarness.Playground
 
         static ApiResponse<EstablishedConversationModel> EstablishConversation(HubsterAuthorizer authorizer)
         {
-            var direct = new HubsterDirectClientCustomer("http://localhost:8251");
+            var direct = new HubsterDirectClientCustomer("http://localhost", "http://localhost:8251");
 
             //var apiResponse = direct.Conversation.Establish(authorizer, new EstablishConversationRequestModel
             //{
@@ -42,7 +42,7 @@ namespace TestHarness.Playground
 
         static ApiResponse<EstablishedConversationModel> GetEstablishedConversation(HubsterAuthorizer authorizer)
         {
-            var direct = new HubsterDirectClientCustomer("http://localhost:8251");
+            var direct = new HubsterDirectClientCustomer("http://localhost", "http://localhost:8251");
             // var apiResponse = direct.Conversation.GetEstablished(authorizer, Guid.Parse("71E202DD-F67D-4245-B1FD-2A558332AE90"));
 
             // return apiResponse;
@@ -51,7 +51,7 @@ namespace TestHarness.Playground
 
         static void GetActivities(HubsterAuthorizer authorizer)
         {
-            var direct = new HubsterDirectClientCustomer("http://localhost:8251");
+            var direct = new HubsterDirectClientCustomer("http://localhost", "http://localhost:8251");
             var conResponse = GetEstablishedConversation(authorizer);
             if (conResponse.StatusCode == HttpStatusCode.OK)
             {
@@ -61,7 +61,7 @@ namespace TestHarness.Playground
 
         static void SendActivityToAgent(HubsterAuthorizer authorizer)
         {
-            var direct = new HubsterDirectClientCustomer("http://localhost:8251");
+            var direct = new HubsterDirectClientCustomer("http://localhost", "http://localhost:8251");
 
             var conResponse = GetEstablishedConversation(authorizer);
 
@@ -79,7 +79,7 @@ namespace TestHarness.Playground
 
         static void SendActivityToCustomer(HubsterAuthorizer authorizer)
         {
-            var direct = new HubsterDirectClientBusiness("http://localhost:8251");
+            var direct = new HubsterDirectClientBusiness("http://localhost", "http://localhost", "http://localhost:8251");
 
             var conResponse = GetEstablishedConversation(authorizer);
             if (conResponse.StatusCode == HttpStatusCode.OK)

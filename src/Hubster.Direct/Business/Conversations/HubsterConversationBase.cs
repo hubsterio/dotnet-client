@@ -15,10 +15,11 @@ namespace Hubster.Direct.Business.Conversations
         /// <summary>
         /// Initializes a new instance of the <see cref="HubsterConversation" /> class.
         /// </summary>
+        /// <param name="origin">The origin.</param>
         /// <param name="directUrl">The host URL.</param>
-        internal HubsterConversationBase(string directUrl)
+        internal HubsterConversationBase(string origin, string directUrl)
         {            
-            _engineAccess = new EngineConversationAccess(directUrl);
+            _engineAccess = new EngineConversationAccess(origin, directUrl);
         }
     }
 }

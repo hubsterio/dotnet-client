@@ -16,9 +16,9 @@ namespace Hubster.Direct.Business.Activities
         /// Initializes a new instance of the <see cref="HubsterActivityBase" /> class.
         /// </summary>
         /// <param name="directUrl">The host URL.</param>
-        internal HubsterActivityBase(string directUrl)
+        internal HubsterActivityBase(string origin, string directUrl)
         {            
-            _engineAccess = new EngineActivityAccess(directUrl);
+            _engineAccess = new EngineActivityAccess(origin, directUrl);
         }
     }
 }

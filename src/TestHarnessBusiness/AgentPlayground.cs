@@ -305,7 +305,8 @@ namespace TestHarnessBusiness
                 return apiResponse;
             });
 
-            var client = new HubsterDirectClientBusiness("http://host.docker.internal:5002", "http://host.docker.internal:5005");
+            var origin = "http://localhost";
+            var client = new HubsterDirectClientBusiness(origin, "http://host.docker.internal:5002", "http://host.docker.internal:5005");
             var authorizer = new HubsterAuthorizer(auth);
 
             while(true)
@@ -322,6 +323,7 @@ namespace TestHarnessBusiness
                 var eventResponse = client.Events.Start(options =>
                 {
                     options.Authorizer = authorizer;
+                    options.Origin = origin;
                     options.IntegrationId = Guid.Parse(_agentIntegrationId);
                     options.OnConnected = () => Display("Connected", ConsoleColor.Cyan);
                     options.OnDisconnected = () => Display("Disconnected", ConsoleColor.Yellow);

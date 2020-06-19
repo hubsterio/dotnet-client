@@ -16,10 +16,11 @@ namespace Hubster.Direct.Business.Activities
     public class HubsterActivityBusiness : HubsterActivityBase, IHubsterActivityBusiness
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HubsterActivityBusiness"/> class.
+        /// Initializes a new instance of the <see cref="HubsterActivityBusiness" /> class.
         /// </summary>
+        /// <param name="origin"></param>
         /// <param name="directUrl">The direct URL.</param>
-        internal HubsterActivityBusiness(string directUrl) : base(directUrl)
+        internal HubsterActivityBusiness(string origin, string directUrl) : base(origin, directUrl)
         {            
         }
 

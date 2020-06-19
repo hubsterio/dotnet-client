@@ -21,7 +21,7 @@ namespace Hubster.Auth.Models
         public int? Expires { get; internal set; }
 
         [JsonProperty("expire_time", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTimeOffset ExpireTime { get; internal set; }
+        public DateTimeOffset ExpireTime { get; set; }
 
         [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
         public string Error { get; internal set; }

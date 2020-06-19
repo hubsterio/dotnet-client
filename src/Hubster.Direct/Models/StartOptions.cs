@@ -7,6 +7,7 @@ namespace Hubster.Abstractions.Models
     public class StartOptions
     {
         public IHubsterAuthorizer Authorizer { get; set; }
+        public string Origin { get; set; }
         public Guid IntegrationId { get; set; }
         public Guid? ConversationId { get; set; }
         public Action OnConnected { get; set; }

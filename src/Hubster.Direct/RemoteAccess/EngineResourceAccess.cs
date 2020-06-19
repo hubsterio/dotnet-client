@@ -14,12 +14,17 @@ namespace Hubster.Direct.RemoteAccess
     /// </summary>
     internal class EngineResourceAccess : EngineBaseAccess
     {
+        private readonly string _origin;
+        private readonly string _hostUrl;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineResourceAccess" /> class.
         /// </summary>
         /// <param name="hostUrl">The host URL.</param>
-        public EngineResourceAccess(string hostUrl) : base(hostUrl)
+        public EngineResourceAccess(string origin, string hostUrl)
         {
+            _origin = origin;
+            _hostUrl = hostUrl;
         }
 
         /// <summary>
@@ -40,7 +45,8 @@ namespace Hubster.Direct.RemoteAccess
             var restRequest = new RestRequest("/api/v1/conversations/establish", Method.POST) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
-            restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
+            restRequest.AddHeader("Authorization", $"{authorizer.Token.TokenType} {authorizer.Token.AccessToken}");
+            restRequest.AddHeader("Origin", _origin);
 
             var body = JsonConvert.SerializeObject(request);
             restRequest.AddParameter("application/json", body, ParameterType.RequestBody);
@@ -68,7 +74,8 @@ namespace Hubster.Direct.RemoteAccess
             var restRequest = new RestRequest($"/api/v1/conversations/{conversationId}/established", Method.GET) { Timeout = 20000 };
 
             restRequest.AddHeader("Content-Type", "application/json");
-            restRequest.AddHeader("Authorization", $"Bearer {authorizer.Token.AccessToken}");
+            restRequest.AddHeader("Authorization", $"{authorizer.Token.TokenType} {authorizer.Token.AccessToken}");
+            restRequest.AddHeader("Origin", _origin);
 
             var restResponse = client.Execute(restRequest);
             apiResponse = ExtractResponse<EstablishedConversationModel>(restResponse);
